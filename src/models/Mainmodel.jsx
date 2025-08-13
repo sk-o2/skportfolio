@@ -150,9 +150,11 @@ export function Mainmodel({
   return (
     <a.primitive
       ref={mainmodelRef}
-      scale={0.01}
+      // scale={0.01}
       position={[0, -2.5, -1]}
       object={scene}
+      scale={window.innerWidth < 640 ? 0.008 :0.01}
+      // position={window.innerWidth < 640 ? [0, -2.5, -1] : [0, -2.5, -1]}
       {...props}
     />
   );

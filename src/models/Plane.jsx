@@ -18,7 +18,10 @@ export function Plane({ isRotating, ...props }) {
 
   return (
     <mesh {...props} ref={ref}>
-      <primitive object={scene} />
+      <primitive object={scene} 
+      position={window.innerWidth < 640 ? [0,-0.2,0] : [0, 0, 0]}
+      scale={window.innerWidth < 640 ? 0.7 :1}
+      />
     </mesh>
   );
 }
