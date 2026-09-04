@@ -3,15 +3,16 @@ import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import skyScene from "../assets/3d/space.glb";
 
-export function Sky({ isRotating }) {
+export function Sky({ isRotating, rotationSpeed = 0.04 }) {
   const sky = useGLTF(skyScene);
   const skyRef = useRef();
   const { nodes, materials } = useGLTF(skyScene);
+
   useFrame((_, delta) => {
-    if (isRotating) {
-      skyRef.current.rotation.y += 0.25 * delta;
-    }
+    // Always rotate slowly — ignore isRotating flag for ambient pages
+    skyRef.current.rotation.y += rotationSpeed * delta;
   });
+
   return (
     <group ref={skyRef} dispose={null}>
       <mesh

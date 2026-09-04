@@ -4,6 +4,8 @@ import { Suspense, useRef, useState, useEffect } from "react";
 import useAlert from "../hooks/useAlert";
 import { Alert, Loader } from "../components";
 import Robot from "../models/Robot";
+import { Sky } from "../models/Sky";
+import { Bird } from "../models/Bird";
 
 const Contact = () => {
   const [isFocused, setIsFocused] = useState(false);
@@ -74,63 +76,85 @@ const Contact = () => {
   };
 
   return (
-    <section className="relative flex lg:flex-row flex-col max-container">
+    <div className="relative w-full min-h-screen">
+      {/* 3D Background Canvas */}
+      <div className="fixed inset-0 pointer-events-none z-0 opacity-40">
+        <Canvas camera={{ near: 0.1, far: 1000, position: [0, 0, 5] }}>
+          <Suspense fallback={null}>
+            <directionalLight position={[1, 1, 1]} intensity={2} />
+            <ambientLight intensity={0.8} />
+            <hemisphereLight skyColor="#b1e1ff" groundColor="#000000" intensity={1} />
+            <Sky isRotating={true} />
+            <Bird range={30} speed={0.012} yAmplitude={0.4} yBase={3} scale={0.004} />
+          </Suspense>
+        </Canvas>
+      </div>
+
+      {/* Foreground Content */}
+      <section className="relative z-10 flex lg:flex-row flex-col max-container">
       {alert.show && <Alert {...alert} />}
 
       <div className="flex-1 min-w-[50%] flex flex-col">
         <h1 className="head-text">Contact Us🤙</h1>
 
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="w-full flex flex-col gap-7 mt-14"
-        >
-          <label className="text-gray-300 font-semibold">
-            Name
-            <input
-              type="text"
-              name="name"
-              className="input"
-              placeholder="sumit"
-              required
-              value={form.name}
-              onChange={handleChange}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-          </label>
-          <label className="text-gray-300 font-semibold">
-            Email
-            <input
-              type="email"
-              name="email"
-              className="input"
-              placeholder="skthakur@gmail.com"
-              required
-              value={form.email}
-              onChange={handleChange}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-          </label>
-          <label className="text-gray-300 font-semibold">
-            Your Message
-            <textarea
-              name="message"
-              rows="4"
-              className="textarea"
-              placeholder="Your thoughts belong here…"
-              value={form.message}
-              onChange={handleChange}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
-          </label>
+        {/* Glassmorphism Form Card */}
+        <div className="mt-10 bg-slate-900/10 backdrop-blur-xl border border-slate-700/30 rounded-2xl p-8 shadow-2xl shadow-black/10">
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="w-full flex flex-col gap-6"
+          >
+            <label className="text-slate-300 font-semibold text-sm flex flex-col gap-2">
+              Name
+              <input
+                type="text"
+                name="name"
+                className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 focus:border-blue-500/70 focus:ring-2 focus:ring-blue-500/20 text-slate-100 placeholder-slate-500 text-sm rounded-xl px-4 py-3 outline-none transition-all duration-200"
+                placeholder="Sumit"
+                required
+                value={form.name}
+                onChange={handleChange}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+              />
+            </label>
+            <label className="text-slate-300 font-semibold text-sm flex flex-col gap-2">
+              Email
+              <input
+                type="email"
+                name="email"
+                className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 focus:border-blue-500/70 focus:ring-2 focus:ring-blue-500/20 text-slate-100 placeholder-slate-500 text-sm rounded-xl px-4 py-3 outline-none transition-all duration-200"
+                placeholder="skthakur@gmail.com"
+                required
+                value={form.email}
+                onChange={handleChange}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+              />
+            </label>
+            <label className="text-slate-300 font-semibold text-sm flex flex-col gap-2">
+              Your Message
+              <textarea
+                name="message"
+                rows="5"
+                className="bg-slate-800/60 backdrop-blur-sm border border-slate-700/80 focus:border-blue-500/70 focus:ring-2 focus:ring-blue-500/20 text-slate-100 placeholder-slate-500 text-sm rounded-xl px-4 py-3 outline-none transition-all duration-200 resize-none"
+                placeholder="Your thoughts belong here…"
+                value={form.message}
+                onChange={handleChange}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+              />
+            </label>
 
-          <button type="submit" disabled={loading} className="btn">
-            {loading ? "Sending..." : "Submit"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-2 w-full py-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold text-sm tracking-wide transition-all duration-200 shadow-lg shadow-blue-500/20 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? "Sending..." : "Send Message →"}
+            </button>
+          </form>
+        </div>
       </div>
 
       <div className="lg:w-1/2 w-full lg:h-auto md:h-[550px] h-[350px]">
@@ -162,7 +186,8 @@ const Contact = () => {
           </Suspense>
         </Canvas>
       </div>
-    </section>
+      </section>
+    </div>
   );
 };
 

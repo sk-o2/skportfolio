@@ -36,6 +36,5 @@ export {
     arrow,
     contact,
     soundon,
-    soundoff,
-    insta
+    soundoff
 }
